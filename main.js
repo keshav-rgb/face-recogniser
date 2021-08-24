@@ -1,7 +1,23 @@
 function setup(){
-createCanvas(300,300)  
+canvas = createCanvas(300,300)  
 canvas.center()
+video = createCapture(VIDEO);
+video.hide()
+classifier = ml5.imageclassifier('https://teachablemachine.withgoogle.com/models/iVJL6IuRj/.json')
 }
-function draw() {
-    
+function modelLoaded(){
+console.log('model loaded');
+}
+function draw(){
+  image(video,0,0,300,300) 
+  classifier.classify(video, gotresult);
+}
+function gotresult(error, results){
+if(error){
+console.error(error);
+}else{
+console.log(results);
+document.getElementById("member").innerHTML = results[0].label;
+document.getElementById("accuracy").innerHTML = results[0].confidence.toFixed(3);
+}
 }
